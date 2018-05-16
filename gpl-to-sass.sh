@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# input arguments
-#input_gpl_file=$1
-#output_sass_file=$2
-
 input_gpl_file='/home/valentin/Yandex.Disk/GEF/GEF Vision/Layouts for customers/Viipurin Golf/palette.gpl'
 
 input_folder=$(dirname "${input_gpl_file}")
