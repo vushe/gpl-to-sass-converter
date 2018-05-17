@@ -1,6 +1,17 @@
 #!/bin/bash
 
-input_gpl_file='/home/valentin/Yandex.Disk/GEF/GEF Vision/Layouts for customers/Viipurin Golf/palette.gpl'
+input_gpl_file="$1"
+
+# If there is no arguments passed of file is missing, exit with warning
+if [ ! -e "$input_gpl_file" ]; then
+    echo ''
+    echo '=========================================================='
+    echo 'Warning! Please pass GPL file to process. Does file exist?'
+    echo 'Exiting without actions.'
+    echo '=========================================================='
+    echo ''
+    exit 1
+fi
 
 input_folder=$(dirname "${input_gpl_file}")
 input_filename=$(basename "${input_gpl_file}")
@@ -36,11 +47,14 @@ do
     do
         if [ $j == 3 ]; then
             col=${color[$j]}
+
+        # If color is named with more than two words...
         else
             col=$col'_'${color[$j]}
         fi
     done
 
+    # Convert color name to upper case
     scss_var_name=$(echo '$'$col | awk '{print toupper($0)}')
 
     hex='#'$hex_red$hex_green$hex_blue
@@ -49,3 +63,5 @@ do
 done
 
 rm "$input_folder/$temp_filename"
+
+exit 0
