@@ -13,6 +13,16 @@ if [ ! -e "$input_gpl_file" ]; then
     exit 1
 fi
 
+dec_to_hex() {
+
+    if [ $1 -gt 16 ]; then
+        printf "%x" $1
+    # Providing leading zeroes for numbers lower than 16
+    else
+        printf "0%x" $1
+    fi
+}
+
 input_folder=$(dirname "${input_gpl_file}")
 input_filename=$(basename "${input_gpl_file}")
 
@@ -30,6 +40,8 @@ tail -n +5 "$input_gpl_file" > "$input_folder/$temp_filename"
 # Read temp file into array
 readarray color_data_array < "$input_folder/$temp_filename"
 
+processed_colors=()
+
 # Initializing SCSS file
 echo -n '' > "$input_folder/$sass_filename"
 
@@ -37,9 +49,9 @@ for ((i=0; i < ${#color_data_array[@]}; i+=1))
 do
     read -a color <<< ${color_data_array[i]}
 
-    hex_red=$(printf '%x\n' ${color[0]})
-    hex_green=$(printf '%x\n' ${color[1]})
-    hex_blue=$(printf '%x\n' ${color[2]})
+    hex_red=$(dec_to_hex ${color[0]})
+    hex_green=$(dec_to_hex ${color[1]})
+    hex_blue=$(dec_to_hex ${color[2]})
 
     col=''
 
@@ -53,6 +65,14 @@ do
             col=$col'_'${color[$j]}
         fi
     done
+
+    col_repeats_num=`printf '%s\n' "${processed_colors[@]}" | grep "$col" | wc -w`
+
+    if [ $col_repeats_num -ge 1 ]; then
+        col=$col'_'$col_repeats_num
+    fi
+
+    processed_colors[$i]=$col
 
     # Convert color name to upper case
     scss_var_name=$(echo '$'$col | awk '{print toupper($0)}')
