@@ -47,7 +47,7 @@ echo -n '' > "$input_folder/$sass_filename"
 
 for ((i=0; i < ${#color_data_array[@]}; i+=1))
 do
-    read -a color <<< ${color_data_array[i]}
+    read -a color <<< ${color_data_array[$i]}
 
     hex_red=$(dec_to_hex ${color[0]})
     hex_green=$(dec_to_hex ${color[1]})
