@@ -15,7 +15,7 @@ fi
 
 dec_to_hex() {
 
-    if [ $1 -gt 16 ]; then
+    if [ $1 -gt 15 ]; then
         printf "%x" $1
     # Providing leading zeroes for numbers lower than 16
     else
